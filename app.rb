@@ -33,7 +33,11 @@ option :score do
 	long '--score=SCORE'
 	desc 'Specify the Score'
     end
- option :help do
+option :configtest do
+	long '--configtest'
+	desc 'Check the configuration file for Syntax Errors'
+end
+option :help do
       long '--help'
       desc 'shows this message'
     end
@@ -62,7 +66,11 @@ else
 
 	FileUtils.mv("/tmp/file.tmp", @sa_conf)
 end
+
 ##### Starting Attack #####
+if Choice.choices[:configtest]
+	puts "checking config"
+end
 if Choice.choices[:action] == 'add'
 	puts 'add'
    if Choice.choices[:filter] == nil
@@ -75,5 +83,14 @@ if Choice.choices[:action] == 'add'
            puts 'Please mention the score'
    end
 else
-	puts 'delete'
+	%x( /bin/bash spamassassin --lint )
+#		if test.chomp! == nil
+#		puts"All is Well"
+#		else 
+#	  	puts "Errors found \n"
+#	 if test.empty?	
+#	      puts "all is well"
+#	 else
+#   	puts "errors"
+#	 end	
 end
